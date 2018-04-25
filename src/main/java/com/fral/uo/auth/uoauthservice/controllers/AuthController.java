@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Value("${message: Default Hello}")
+    //@Value("${message}")
     private String message;
 
     @GetMapping("/message")
