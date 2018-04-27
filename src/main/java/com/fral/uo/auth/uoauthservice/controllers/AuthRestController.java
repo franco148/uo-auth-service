@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 @RequestMapping("/auth")
 @RestController
-public class AuthController {
+public class AuthRestController {
 
     @Value("${message: Default Hello}")
     //@Value("${message}")
