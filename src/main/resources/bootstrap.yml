@@ -1,20 +1,10 @@
 spring:
   profiles:
-    active: dev
+    active: default
   application:
     name: auth-service
   cloud:
     config:
-      uri: http://localhost:9000
-
-server:
-  port: 9005
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
-
-logging:
-  level:
-    org.springframework.web: DEBUG
+      uri: http://localhost:9010
+#      discovery:
+#        service-id: uo-config-service
