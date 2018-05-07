@@ -1,4 +1,4 @@
-package com.fral.uo.auth.uoauthservice;
+package com.umssonline.auth;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

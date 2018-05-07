@@ -1,4 +1,4 @@
-package com.fral.uo.auth.uoauthservice.controllers;
+package com.umssonline.auth.controllers;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

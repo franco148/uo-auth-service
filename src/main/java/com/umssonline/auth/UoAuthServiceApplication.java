@@ -1,4 +1,4 @@
-package com.fral.uo.auth.uoauthservice;
+package com.umssonline.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
