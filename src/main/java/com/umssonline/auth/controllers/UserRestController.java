@@ -13,22 +13,22 @@ public class UserRestController {
 
     @GetMapping
     public ResponseEntity getAll() {
-        return null;
+        return ResponseEntity.ok("all users");
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable("id") final Serializable id) {
-        return null;
+        return ResponseEntity.ok(id);
     }
 
     @PostMapping
     public ResponseEntity save(@RequestBody final Object user) {
-        return null;
+        return ResponseEntity.ok(user);
     }
 
     @PatchMapping
     public ResponseEntity edit(@RequestBody final Object user) {
-        return null;
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{id}")
