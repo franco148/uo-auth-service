@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 
 @RefreshScope
-@RequestMapping("/auth/users")
+@RequestMapping("/users")
 @RestController
 public class UserRestController {
 
