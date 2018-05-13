@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,8 +38,14 @@ public class HibernateDaoImpl implements AuthDao {
 
     @Override
     public <T> Collection<T> load(Class<T> entityClass) {
-        //String selectAllQuery = "SELECT e FROM "
-        return null;
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> rootEntry = cq.from(entityClass);
+
+        CriteriaQuery<T> all = cq.select(rootEntry);
+        TypedQuery<T> allQuery = entityManager.createQuery(all);
+
+        return allQuery.getResultList();
     }
 
     @Override
@@ -46,12 +54,14 @@ public class HibernateDaoImpl implements AuthDao {
     }
 
     @Override
-    public <T> Collection<T> load(String jpql) {
-        return null;
+    public <T> Collection<T> load(String jpql, Class<T> entityClass) {
+        TypedQuery<T> query = entityManager.createQuery(jpql, entityClass);
+        return query.getResultList();
     }
 
     @Override
     public <T> Boolean delete(T entity) {
-        return null;
+        entityManager.remove(entity);
+        return true;
     }
 }
