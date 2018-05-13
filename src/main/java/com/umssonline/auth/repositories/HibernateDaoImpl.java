@@ -2,6 +2,8 @@ package com.umssonline.auth.repositories;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+@Repository
 public class HibernateDaoImpl implements AuthDao {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -19,6 +22,10 @@ public class HibernateDaoImpl implements AuthDao {
     private EntityManager entityManager;
 
 
+    @Autowired
+    public HibernateDaoImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public <T> T persist(T entity) {

@@ -21,6 +21,8 @@ public class User {
     private String account;
     @Column(nullable = false, length = 30)
     private String password;
+    @Column(nullable = false)
+    private Boolean isLogged;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -84,6 +86,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(Boolean logged) {
+        isLogged = logged;
     }
 
     public Role getRole() {
