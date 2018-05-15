@@ -40,12 +40,37 @@ public class UserService {
         return authDao.persist(user);
     }
 
-    public User edit(User user) {
-        return null;
+    public User edit(User user) throws Exception {
+        User userFromDb = authDao.find(User.class, user.getId());
+
+        if (userFromDb == null) {
+            throw new Exception("User does not exist.");
+        }
+
+        copyUserEntity(userFromDb, user);
+
+        return authDao.persist(user);
     }
 
-    public boolean unregister(User user) {
-        authDao.delete(user);
+    public boolean unregister(Long id) throws Exception {
+        User userFromDb = authDao.find(User.class, id);
+
+        if (userFromDb == null) {
+            throw new Exception("User does not exist.");
+        }
+
+        authDao.delete(userFromDb);
         return true;
+    }
+
+
+    private void copyUserEntity(User target, User source) {
+        target.setId(source.getId());
+        target.setName(source.getName());
+        target.setLastName(source.getLastName());
+        target.setNickName(source.getNickName());
+        target.setBirthDate(source.getBirthDate());
+        target.setAccount(source.getAccount());
+        target.setPassword(source.getPassword());
     }
 }
