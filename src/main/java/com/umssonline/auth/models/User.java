@@ -1,7 +1,15 @@
 package com.umssonline.auth.models;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Date;
+
+//Soft delete
+@SQLDelete(sql = "update user set is_deleted=true where id=?")
+//Conditions when retrieving data when it is not deleted
+@Where(clause = "is_deleted=false")
 
 @Entity
 public class User {
@@ -23,6 +31,8 @@ public class User {
     private String password;
     @Column(nullable = false)
     private Boolean isLogged;
+    @Column(nullable = false)
+    private Boolean isDeleted;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -104,11 +114,24 @@ public class User {
         isLogged = logged;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @PreRemove
+    private void preRemove() {
+        this.isLogged = true;
     }
 }

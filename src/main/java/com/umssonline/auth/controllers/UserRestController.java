@@ -1,5 +1,6 @@
 package com.umssonline.auth.controllers;
 
+import com.umssonline.auth.controllers.dto.Credentials;
 import com.umssonline.auth.models.User;
 import com.umssonline.auth.services.UserService;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -27,7 +28,7 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable("id") final Long id) {
+    public ResponseEntity getById(@PathVariable("id") final Long id) throws Exception {
         User user = userService.detail(id);
         return ResponseEntity.ok(user);
     }
@@ -48,5 +49,19 @@ public class UserRestController {
     public ResponseEntity delete(@PathVariable("id") final Long id) throws Exception {
         boolean wasUnregistered = userService.unregister(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(wasUnregistered);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity logIn(@RequestBody final Credentials credentials) throws Exception {
+        User loggedUser = userService.login(credentials.getAccount(), credentials.getPassword());
+
+        return ResponseEntity.ok(loggedUser);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestBody final Credentials credentials) throws Exception {
+        boolean wasLogout = userService.logout(credentials.getAccount(), credentials.getPassword());
+
+        return ResponseEntity.ok(wasLogout);
     }
 }
