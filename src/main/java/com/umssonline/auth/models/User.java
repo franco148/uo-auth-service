@@ -1,5 +1,7 @@
 package com.umssonline.auth.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -122,6 +124,7 @@ public class User {
         this.role = role;
     }
 
+    //@JsonIgnore
     @PreRemove
     private void preRemove() {
         this.isLogged = true;

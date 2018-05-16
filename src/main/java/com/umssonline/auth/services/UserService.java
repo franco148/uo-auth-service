@@ -25,9 +25,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User detail(Long id) {
+    public User detail(Long id) throws Exception {
         //return authDao.find(User.class, id);
-        return userRepository.getOne(id);
+        //return userRepository.getOne(id);
+        Optional<User> userFromDb = userRepository.findById(id);
+        if (!userFromDb.isPresent()) {
+            throw new Exception("User does not exist.");
+        }
+        return userFromDb.get();
     }
 
     @Transactional
@@ -43,7 +48,13 @@ public class UserService {
 ////        logginUser.setLogged(true);
 ////
 ////        return authDao.persist(logginUser);
-        return userRepository.findByAccountAndPassword(account, password);
+        Optional<User> userFromDb = userRepository.findByAccountAndPassword(account, password);
+        if (!userFromDb.isPresent()) {
+            throw new Exception("User does not exist.");
+        }
+        userFromDb.get().setLogged(true);
+
+        return userRepository.save(userFromDb.get());
     }
 
     public User register(User user) {
