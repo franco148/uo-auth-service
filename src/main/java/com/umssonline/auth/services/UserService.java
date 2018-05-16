@@ -57,6 +57,18 @@ public class UserService {
         return userRepository.save(userFromDb.get());
     }
 
+    public boolean logout(String account, String password) throws Exception {
+        Optional<User> userFromDb = userRepository.findByAccountAndPassword(account, password);
+        if (!userFromDb.isPresent()) {
+            throw new Exception("User does not exist.");
+        }
+
+        userFromDb.get().setLogged(false);
+
+        userRepository.save(userFromDb.get());
+        return true;
+    }
+
     public User register(User user) {
         //return authDao.persist(user);
         return userRepository.save(user);

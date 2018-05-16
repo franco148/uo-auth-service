@@ -57,4 +57,11 @@ public class UserRestController {
 
         return ResponseEntity.ok(loggedUser);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestBody final Credentials credentials) throws Exception {
+        boolean wasLogout = userService.logout(credentials.getAccount(), credentials.getPassword());
+
+        return ResponseEntity.ok(wasLogout);
+    }
 }

@@ -1,9 +1,16 @@
 package com.umssonline.auth.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
+
+//Soft delete
+@SQLDelete(sql = "update user set is_deleted=true where id=?")
+//Conditions when retrieving data when it is not deleted
+@Where(clause = "is_deleted=false")
 
 @Entity
 public class User {
