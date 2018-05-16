@@ -46,6 +46,16 @@ public class HibernateDaoImpl implements AuthDao {
         return Arrays.asList(entities);
     }
 
+    @Override
+    public <T> T update(T entity) {
+        logger.info("Contiene la entidad...." + entityManager.contains(entity));
+        if(!entityManager.contains(entity)) {
+            entityManager.merge(entity);
+        }
+        entityManager.persist(entity);
+        return entity;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public <T> Collection<T> load(Class<T> entityClass) {
