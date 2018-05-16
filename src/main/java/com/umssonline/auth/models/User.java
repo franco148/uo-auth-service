@@ -1,6 +1,5 @@
 package com.umssonline.auth.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -131,7 +130,6 @@ public class User {
         this.role = role;
     }
 
-    //@JsonIgnore
     @PreRemove
     private void preRemove() {
         this.isLogged = true;
