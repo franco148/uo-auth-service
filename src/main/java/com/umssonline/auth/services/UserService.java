@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -24,27 +25,27 @@ public class UserService {
 
         Optional<User> userFromDb = userRepository.findById(id);
         if (!userFromDb.isPresent()) {
-            throw new Exception("User does not exist.");
+            throw new EntityNotFoundException("User does not exist.");
         }
         return userFromDb.get();
     }
 
     @Transactional
-    public User login(String account, String password) throws Exception {
+    public User login(String account, String password) throws EntityNotFoundException {
 
         Optional<User> userFromDb = userRepository.findByAccountAndPassword(account, password);
         if (!userFromDb.isPresent()) {
-            throw new Exception("User does not exist.");
+            throw new EntityNotFoundException("User does not exist.");
         }
         userFromDb.get().setIsLogged(true);
 
         return userRepository.save(userFromDb.get());
     }
 
-    public boolean logout(String account, String password) throws Exception {
+    public boolean logout(String account, String password) throws EntityNotFoundException {
         Optional<User> userFromDb = userRepository.findByAccountAndPassword(account, password);
         if (!userFromDb.isPresent()) {
-            throw new Exception("User does not exist.");
+            throw new EntityNotFoundException("User does not exist.");
         }
 
         userFromDb.get().setIsLogged(false);
@@ -58,11 +59,11 @@ public class UserService {
     }
 
     @Transactional
-    public User edit(User user) throws Exception {
+    public User edit(User user) throws EntityNotFoundException {
         Optional<User> userFromDb = userRepository.findById(user.getId());
 
         if (!userFromDb.isPresent()) {
-            throw new Exception("User does not exist.");
+            throw new EntityNotFoundException("User does not exist.");
         }
 
         User editedUser = userFromDb.get();
@@ -73,7 +74,7 @@ public class UserService {
     }
 
     @Transactional
-    public boolean unregister(Long id) throws Exception {
+    public boolean unregister(Long id) {
         userRepository.deleteById(id);
         return true;
     }
