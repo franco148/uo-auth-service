@@ -1,4 +1,4 @@
-package com.umssonline.auth.models;
+package com.umssonline.auth.models.entity;
 
 public enum RoleEnum {
 

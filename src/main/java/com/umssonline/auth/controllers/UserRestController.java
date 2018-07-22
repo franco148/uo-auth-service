@@ -1,7 +1,7 @@
 package com.umssonline.auth.controllers;
 
-import com.umssonline.auth.controllers.dto.Credentials;
-import com.umssonline.auth.models.User;
+import com.umssonline.auth.models.dto.Credentials;
+import com.umssonline.auth.models.entity.User;
 import com.umssonline.auth.services.UserService;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.Collection;
 
 @RefreshScope

@@ -1,4 +1,4 @@
-package com.umssonline.auth.models;
+package com.umssonline.auth.models.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
@@ -7,7 +7,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
