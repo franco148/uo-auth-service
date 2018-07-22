@@ -1,6 +1,6 @@
 package com.umssonline.auth.services;
 
-import com.umssonline.auth.models.User;
+import com.umssonline.auth.models.entity.User;
 import com.umssonline.auth.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +36,7 @@ public class UserService {
         if (!userFromDb.isPresent()) {
             throw new Exception("User does not exist.");
         }
-        userFromDb.get().setLogged(true);
+        userFromDb.get().setIsLogged(true);
 
         return userRepository.save(userFromDb.get());
     }
@@ -47,7 +47,7 @@ public class UserService {
             throw new Exception("User does not exist.");
         }
 
-        userFromDb.get().setLogged(false);
+        userFromDb.get().setIsLogged(false);
 
         userRepository.save(userFromDb.get());
         return true;

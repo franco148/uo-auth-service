@@ -1,6 +1,6 @@
 package com.umssonline.auth.repositories;
 
-import com.umssonline.auth.models.User;
+import com.umssonline.auth.models.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

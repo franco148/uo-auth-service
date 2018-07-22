@@ -1,7 +1,7 @@
 package com.umssonline.auth.controllers;
 
-import com.umssonline.auth.controllers.dto.Credentials;
-import com.umssonline.auth.models.User;
+import com.umssonline.auth.models.dto.CredentialsDto;
+import com.umssonline.auth.models.entity.User;
 import com.umssonline.auth.services.UserService;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.Collection;
 
 @RefreshScope
@@ -52,15 +51,15 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity logIn(@RequestBody final Credentials credentials) throws Exception {
-        User loggedUser = userService.login(credentials.getAccount(), credentials.getPassword());
+    public ResponseEntity logIn(@RequestBody final CredentialsDto credentialsDto) throws Exception {
+        User loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(loggedUser);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody final Credentials credentials) throws Exception {
-        boolean wasLogout = userService.logout(credentials.getAccount(), credentials.getPassword());
+    public ResponseEntity logout(@RequestBody final CredentialsDto credentialsDto) throws Exception {
+        boolean wasLogout = userService.logout(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(wasLogout);
     }
