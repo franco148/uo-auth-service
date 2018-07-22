@@ -1,6 +1,6 @@
 package com.umssonline.auth.controllers;
 
-import com.umssonline.auth.models.dto.Credentials;
+import com.umssonline.auth.models.dto.CredentialsDto;
 import com.umssonline.auth.models.entity.User;
 import com.umssonline.auth.services.UserService;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -51,15 +51,15 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity logIn(@RequestBody final Credentials credentials) throws Exception {
-        User loggedUser = userService.login(credentials.getAccount(), credentials.getPassword());
+    public ResponseEntity logIn(@RequestBody final CredentialsDto credentialsDto) throws Exception {
+        User loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(loggedUser);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody final Credentials credentials) throws Exception {
-        boolean wasLogout = userService.logout(credentials.getAccount(), credentials.getPassword());
+    public ResponseEntity logout(@RequestBody final CredentialsDto credentialsDto) throws Exception {
+        boolean wasLogout = userService.logout(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(wasLogout);
     }
