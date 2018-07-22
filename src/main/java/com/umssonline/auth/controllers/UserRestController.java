@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 
 @RefreshScope
@@ -39,26 +40,26 @@ public class UserRestController {
     }
 
     @PatchMapping
-    public ResponseEntity edit(@RequestBody final User user) throws Exception {
+    public ResponseEntity edit(@RequestBody final User user) throws EntityNotFoundException {
         User editedUser = userService.edit(user);
         return ResponseEntity.ok(editedUser);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") final Long id) throws Exception {
+    public ResponseEntity delete(@PathVariable("id") final Long id) {
         boolean wasUnregistered = userService.unregister(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(wasUnregistered);
     }
 
     @PostMapping("/login")
-    public ResponseEntity logIn(@RequestBody final CredentialsDto credentialsDto) throws Exception {
+    public ResponseEntity logIn(@RequestBody final CredentialsDto credentialsDto) throws EntityNotFoundException {
         User loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(loggedUser);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody final CredentialsDto credentialsDto) throws Exception {
+    public ResponseEntity logout(@RequestBody final CredentialsDto credentialsDto) throws EntityNotFoundException {
         boolean wasLogout = userService.logout(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(wasLogout);
