@@ -1,137 +1,88 @@
 package com.umssonline.auth.models;
 
+import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 //Soft delete
 @SQLDelete(sql = "update user set is_deleted=true where id=?")
 //Conditions when retrieving data when it is not deleted
 @Where(clause = "is_deleted=false")
 
+@Data
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    @NotBlank(message = "Name can not be empty.")
+    @Size(max = 20, message = "Name must have at most 20 characters.")
     @Column(nullable = false, length = 20)
     private String name;
+
+    @NotBlank(message = "Last Name can not be empty.")
+    @Size(max = 30, message = "Last Name must have at most 30 characters.")
     @Column(nullable = false, length = 30)
     private String lastName;
+
+    @Size(max = 15, message = "Nickname must have at most 15 characters.")
     @Column(length = 15)
     private String nickName;
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+
+    @PastOrPresent(message = "Your birth date can not be today or future.")
+    private LocalDate birthDate;
+
+    @Email(message = "Your account should be a valid e-mail address.")
+    @Size(min = 5, message = "Your account should have at least 5 characters.")
     @Column(nullable = false, unique = true, length = 20)
     private String account;
+
+    @Size(min = 6, max = 30, message = "Password should contain between 6 and 30 characters.")
     @Column(nullable = false, length = 30)
     private String password;
+
+    @NotNull
     @Column(nullable = false)
     private Boolean isLogged;
+
+    @NotNull
     @Column(nullable = false)
     private Boolean isDeleted;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isEnabled;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Set<Role> userRoles = new HashSet<>();
 
     protected User() {
 
     }
 
-    public User(String name, String lastName, String nickName, Date birthDate, String account, String password, Role role) {
+    public User(String name, String lastName, String nickName, LocalDate birthDate, String account, String password, Role role) {
         this.name = name;
         this.lastName = lastName;
         this.nickName = nickName;
         this.birthDate = birthDate;
         this.account = account;
         this.password = password;
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getLogged() {
-        return isLogged;
-    }
-
-    public void setLogged(Boolean logged) {
-        isLogged = logged;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+        this.userRoles.add(role);
     }
 
     @PreRemove
     private void preRemove() {
-        this.isLogged = true;
+        this.isDeleted = true;
     }
 }
