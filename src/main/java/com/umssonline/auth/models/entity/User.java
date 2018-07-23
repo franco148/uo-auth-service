@@ -7,6 +7,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,6 +66,12 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private Set<Role> userRoles = new HashSet<>();
+
+    @NotNull
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     protected User() {
 
