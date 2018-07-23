@@ -2,10 +2,10 @@ package com.umssonline.auth.services;
 
 import com.umssonline.auth.models.entity.User;
 import com.umssonline.auth.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.Optional;
@@ -13,15 +13,17 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Resource
+    @Autowired
     private UserRepository userRepository;
 
 
+    @Transactional(readOnly = true)
     public Collection<User> loadAll() {
         return userRepository.findAll();
     }
 
-    public User detail(Long id) throws Exception {
+    @Transactional(readOnly = true)
+    public User detail(Long id) {
 
         Optional<User> userFromDb = userRepository.findById(id);
         if (!userFromDb.isPresent()) {
@@ -42,6 +44,7 @@ public class UserService {
         return userRepository.save(userFromDb.get());
     }
 
+    @Transactional
     public boolean logout(String account, String password) throws EntityNotFoundException {
         Optional<User> userFromDb = userRepository.findByAccountAndPassword(account, password);
         if (!userFromDb.isPresent()) {
@@ -54,29 +57,43 @@ public class UserService {
         return true;
     }
 
+    @Transactional
     public User register(User user) {
         return userRepository.save(user);
     }
 
     @Transactional
     public User edit(User user) throws EntityNotFoundException {
-        Optional<User> userFromDb = userRepository.findById(user.getId());
+//        Optional<User> userFromDb = userRepository.findById(user.getId());
+//
+//        if (!userFromDb.isPresent()) {
+//            throw new EntityNotFoundException("User does not exist.");
+//        }
+//
+//        User editedUser = userFromDb.get();
+//
+//        copyUserEntity(editedUser, user);
 
-        if (!userFromDb.isPresent()) {
-            throw new EntityNotFoundException("User does not exist.");
-        }
-
-        User editedUser = userFromDb.get();
-
-        copyUserEntity(editedUser, user);
-
-        return userRepository.save(editedUser);
+        return userRepository.save(user);
     }
 
     @Transactional
     public boolean unregister(Long id) {
         userRepository.deleteById(id);
         return true;
+    }
+
+    @Transactional
+    public void confirmSubscription(Long id) {
+        Optional<User> userFromDb = userRepository.findById(id);
+
+        if (!userFromDb.isPresent()) {
+            throw new EntityNotFoundException("User does not exist.");
+        }
+
+        User confirmedUser = userFromDb.get();
+        confirmedUser.setIsEnabled(true);
+        userRepository.save(confirmedUser);
     }
 
 

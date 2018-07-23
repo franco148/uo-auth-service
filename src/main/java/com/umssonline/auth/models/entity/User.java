@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 //Soft delete
-@SQLDelete(sql = "update user set is_deleted=true where id=?")
+@SQLDelete(sql = "update users set is_deleted=true where id=?")
 //Conditions when retrieving data when it is not deleted
 @Where(clause = "is_deleted=false")
 
