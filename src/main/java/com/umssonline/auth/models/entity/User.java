@@ -7,11 +7,12 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 //Soft delete
-@SQLDelete(sql = "update user set is_deleted=true where id=?")
+@SQLDelete(sql = "update users set is_deleted=true where id=?")
 //Conditions when retrieving data when it is not deleted
 @Where(clause = "is_deleted=false")
 
@@ -62,9 +63,15 @@ public class User {
     @Column(nullable = false)
     private Boolean isEnabled;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
     private Set<Role> userRoles = new HashSet<>();
+
+    @NotNull
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     protected User() {
 

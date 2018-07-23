@@ -2,10 +2,10 @@ package com.umssonline.auth.services;
 
 import com.umssonline.auth.models.entity.User;
 import com.umssonline.auth.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.Optional;
@@ -13,15 +13,17 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Resource
+    @Autowired
     private UserRepository userRepository;
 
 
+    @Transactional(readOnly = true)
     public Collection<User> loadAll() {
         return userRepository.findAll();
     }
 
-    public User detail(Long id) throws Exception {
+    @Transactional(readOnly = true)
+    public User detail(Long id) {
 
         Optional<User> userFromDb = userRepository.findById(id);
         if (!userFromDb.isPresent()) {
@@ -42,6 +44,7 @@ public class UserService {
         return userRepository.save(userFromDb.get());
     }
 
+    @Transactional
     public boolean logout(String account, String password) throws EntityNotFoundException {
         Optional<User> userFromDb = userRepository.findByAccountAndPassword(account, password);
         if (!userFromDb.isPresent()) {
@@ -54,8 +57,9 @@ public class UserService {
         return true;
     }
 
+    @Transactional
     public User register(User user) {
-        return userRepository.save(user);
+        return userRepository.saveAndFlush(user);
     }
 
     @Transactional
@@ -66,11 +70,9 @@ public class UserService {
             throw new EntityNotFoundException("User does not exist.");
         }
 
-        User editedUser = userFromDb.get();
+        copyUserEntity(user, userFromDb.get());
 
-        copyUserEntity(editedUser, user);
-
-        return userRepository.save(editedUser);
+        return userRepository.saveAndFlush(user);
     }
 
     @Transactional
@@ -79,14 +81,27 @@ public class UserService {
         return true;
     }
 
+    @Transactional
+    public void confirmSubscription(Long id) {
+        Optional<User> userFromDb = userRepository.findById(id);
+
+        if (!userFromDb.isPresent()) {
+            throw new EntityNotFoundException("User does not exist.");
+        }
+
+        User confirmedUser = userFromDb.get();
+        confirmedUser.setIsEnabled(true);
+        userRepository.save(confirmedUser);
+    }
+
 
     private void copyUserEntity(User target, User source) {
-        target.setId(source.getId());
-        target.setName(source.getName());
-        target.setLastName(source.getLastName());
-        target.setNickName(source.getNickName());
-        target.setBirthDate(source.getBirthDate());
-        target.setAccount(source.getAccount());
-        target.setPassword(source.getPassword());
+        target.setIsEnabled(source.getIsEnabled());
+        target.setIsDeleted(source.getIsDeleted());
+        target.setIsLogged(source.getIsLogged());
+        target.setCreatedAt(source.getCreatedAt());
+
+        target.getUserRoles().forEach(role -> role.setIsDeleted(false));
+
     }
 }
