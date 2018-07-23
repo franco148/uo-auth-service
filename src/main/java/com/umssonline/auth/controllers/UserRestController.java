@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RefreshScope
@@ -34,7 +35,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody final User user) {
+    public ResponseEntity save(@Valid @RequestBody final User user) {
         User persistedUser = userService.register(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(persistedUser);
     }

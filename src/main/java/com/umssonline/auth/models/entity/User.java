@@ -42,8 +42,8 @@ public class User {
     private LocalDate birthDate;
 
     @Email(message = "Your account should be a valid e-mail address.")
-    @Size(min = 5, message = "Your account should have at least 5 characters.")
-    @Column(nullable = false, unique = true, length = 20)
+    @Size(min = 5, max = 50, message = "Your account should have at least 5 characters and at most 50.")
+    @Column(nullable = false, unique = true, length = 50)
     private String account;
 
     @Size(min = 6, max = 30, message = "Password should contain between 6 and 30 characters.")
