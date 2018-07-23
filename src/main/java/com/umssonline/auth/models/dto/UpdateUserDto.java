@@ -36,7 +36,7 @@ public class UpdateUserDto {
     private String password;
 
     @NotEmpty(message="At least one role is required")
-    private Set<RoleDto> userRoles = new HashSet<>();
+    private Set<UpdateRoleDto> userRoles = new HashSet<>();
 
 
     @JsonIgnore

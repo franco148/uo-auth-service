@@ -8,7 +8,10 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class RoleDto {
+public class UpdateRoleDto {
+
+    @NotNull
+    private Long id;
 
     @NotNull
     private RoleEnum authority;

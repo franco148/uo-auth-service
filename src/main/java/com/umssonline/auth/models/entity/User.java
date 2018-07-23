@@ -63,7 +63,7 @@ public class User {
     @Column(nullable = false)
     private Boolean isEnabled;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
     private Set<Role> userRoles = new HashSet<>();
 

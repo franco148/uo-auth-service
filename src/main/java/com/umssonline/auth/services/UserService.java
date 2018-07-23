@@ -59,22 +59,20 @@ public class UserService {
 
     @Transactional
     public User register(User user) {
-        return userRepository.save(user);
+        return userRepository.saveAndFlush(user);
     }
 
     @Transactional
     public User edit(User user) throws EntityNotFoundException {
-//        Optional<User> userFromDb = userRepository.findById(user.getId());
-//
-//        if (!userFromDb.isPresent()) {
-//            throw new EntityNotFoundException("User does not exist.");
-//        }
-//
-//        User editedUser = userFromDb.get();
-//
-//        copyUserEntity(editedUser, user);
+        Optional<User> userFromDb = userRepository.findById(user.getId());
 
-        return userRepository.save(user);
+        if (!userFromDb.isPresent()) {
+            throw new EntityNotFoundException("User does not exist.");
+        }
+
+        copyUserEntity(user, userFromDb.get());
+
+        return userRepository.saveAndFlush(user);
     }
 
     @Transactional
@@ -98,12 +96,12 @@ public class UserService {
 
 
     private void copyUserEntity(User target, User source) {
-        target.setId(source.getId());
-        target.setName(source.getName());
-        target.setLastName(source.getLastName());
-        target.setNickName(source.getNickName());
-        target.setBirthDate(source.getBirthDate());
-        target.setAccount(source.getAccount());
-        target.setPassword(source.getPassword());
+        target.setIsEnabled(source.getIsEnabled());
+        target.setIsDeleted(source.getIsDeleted());
+        target.setIsLogged(source.getIsLogged());
+        target.setCreatedAt(source.getCreatedAt());
+
+        target.getUserRoles().forEach(role -> role.setIsDeleted(false));
+
     }
 }
