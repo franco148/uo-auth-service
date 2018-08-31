@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Collections;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 6000)
 @RefreshScope
 @RequestMapping("/users")
 @RestController
