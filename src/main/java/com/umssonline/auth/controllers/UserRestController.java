@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Collections;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 6000)
 @RefreshScope
 @RequestMapping("/users")
 @RestController
@@ -70,14 +71,14 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> logIn(@Valid @RequestBody final CredentialsDto credentialsDto) throws EntityNotFoundException {
+    public ResponseEntity<User> logIn(@Valid @RequestBody final CredentialsDto credentialsDto) {
         User loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(loggedUser);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Boolean> logout(@Valid @RequestBody final CredentialsDto credentialsDto) throws EntityNotFoundException {
+    public ResponseEntity<Boolean> logout(@Valid @RequestBody final CredentialsDto credentialsDto) {
         boolean wasLogout = userService.logout(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(wasLogout);

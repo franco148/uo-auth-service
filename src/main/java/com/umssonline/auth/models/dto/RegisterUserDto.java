@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public class RegisterUserDto {
 
     @ApiModelProperty ( notes = "Your birth date can not be today or future.")
     @PastOrPresent(message = "Your birth date can not be today or future.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
     @ApiModelProperty ( notes = "Your account should be a valid e-mail address. It should have at least 5 characters and at most 50.")
