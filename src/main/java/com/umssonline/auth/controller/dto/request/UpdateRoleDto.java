@@ -1,6 +1,5 @@
-package com.umssonline.auth.controller.dto;
+package com.umssonline.auth.controller.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.umssonline.auth.repository.domain.RoleEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +11,16 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "Role Model")
 @Getter
 @Setter
-public class RegisterRoleDto {
+public class UpdateRoleDto {
+
+    @ApiModelProperty
+    (
+        notes = "Id field can not be null or empty.",
+        required = true,
+        dataType = "Integer"
+    )
+    @NotNull
+    private Long id;
 
     @ApiModelProperty
     (
@@ -22,7 +30,4 @@ public class RegisterRoleDto {
     )
     @NotNull
     private RoleEnum authority;
-
-    @JsonIgnore
-    private Boolean isDeleted = false;
 }

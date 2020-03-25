@@ -1,8 +1,9 @@
 package com.umssonline.auth.controller;
 
-import com.umssonline.auth.controller.dto.CredentialsDto;
-import com.umssonline.auth.controller.dto.RegisterUserDto;
-import com.umssonline.auth.controller.dto.UpdateUserDto;
+import com.umssonline.auth.controller.dto.request.CredentialsDto;
+import com.umssonline.auth.controller.dto.request.RegisterUserDto;
+import com.umssonline.auth.controller.dto.request.UpdateUserDto;
+import com.umssonline.auth.controller.dto.response.UserResponseDto;
 import com.umssonline.auth.repository.domain.User;
 import com.umssonline.auth.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -29,10 +30,13 @@ public class UserRestController {
     @Autowired
     private ModelMapper modelMapper;
 
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
-    public ResponseEntity<Collection<User>> getAll() {
-        Collection<User> userCollection = userService.loadAll();
+    public ResponseEntity<Collection<UserResponseDto>> getAll() {
+        Collection<UserResponseDto> userCollection = userService.loadAll();
 
         if (userCollection.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
@@ -42,8 +46,8 @@ public class UserRestController {
     }
 
     @GetMapping("/{user_id}")
-    public ResponseEntity<User> getById(@PathVariable("user_id") final Long id) {
-        User user = userService.detail(id);
+    public ResponseEntity<UserResponseDto> getById(@PathVariable("user_id") final Long id) {
+        UserResponseDto user = userService.detail(id);
         return ResponseEntity.ok(user);
     }
 
@@ -71,8 +75,8 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> logIn(@Valid @RequestBody final CredentialsDto credentialsDto) {
-        User loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
+    public ResponseEntity<UserResponseDto> logIn(@Valid @RequestBody final CredentialsDto credentialsDto) {
+        UserResponseDto loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(loggedUser);
     }

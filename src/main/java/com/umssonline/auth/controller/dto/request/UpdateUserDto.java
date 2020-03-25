@@ -1,4 +1,4 @@
-package com.umssonline.auth.controller.dto;
+package com.umssonline.auth.controller.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;

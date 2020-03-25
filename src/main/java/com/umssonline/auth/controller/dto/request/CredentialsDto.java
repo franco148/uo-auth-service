@@ -1,4 +1,4 @@
-package com.umssonline.auth.controller.dto;
+package com.umssonline.auth.controller.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
