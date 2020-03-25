@@ -104,6 +104,7 @@ public class UserService {
             throw new EntityNotFoundException("User does not exist.");
         }
         User userToBeEdited = modelMapper.map(userDto, User.class);
+        userToBeEdited.setId(userId);
         copyUserEntity(userToBeEdited, userFromDb.get());
 
         User updatedUser = userRepository.saveAndFlush(userToBeEdited);
