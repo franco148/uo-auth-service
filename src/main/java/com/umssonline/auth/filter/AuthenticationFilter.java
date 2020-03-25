@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.Base64Utils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -61,10 +62,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User)authResult.getPrincipal()).getUsername();
         UserResponseDto userDetails = userService.getUserDetailsByAccount(userName);
 
+        String tokenBase64Bytes = Base64Utils.encodeToString(environment.getProperty("uo.auth.security.jwt.token.secret").getBytes());
         String jwtToken = Jwts.builder()
                 .setSubject(userDetails.getId().toString())
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("uo.auth.security.jwt.token.expiration"))))
-                .signWith(SignatureAlgorithm.ES512, environment.getProperty("uo.auth.security.jwt.token.secret"))
+                .signWith(SignatureAlgorithm.HS512, tokenBase64Bytes.getBytes())
                 .compact();
 
         response.addHeader("token", jwtToken);
