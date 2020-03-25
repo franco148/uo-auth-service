@@ -47,8 +47,8 @@ public class User {
     @Column(nullable = false, unique = true, length = 50)
     private String account;
 
-    @Size(min = 6, max = 30, message = "Password should contain between 6 and 30 characters.")
-    @Column(nullable = false, length = 30)
+    @Size(min = 6, max = 200, message = "Password should contain between 6 and 200 characters.")
+    @Column(nullable = false, length = 200)
     private String password;
 
     @NotNull

@@ -14,6 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/users/**").permitAll();
+//        http.authorizeRequests().antMatchers("/**").hasIpAddress(environment.getProperty("uo.auth.gateway.ip")); // When we want to specify the source address
         http.headers().frameOptions().disable();
     }
 }
