@@ -24,8 +24,6 @@ public class UserResponseDto {
 
     private String account;
 
-    private String password;
-
     private Boolean isLogged;
 
     private Boolean isDeleted;
