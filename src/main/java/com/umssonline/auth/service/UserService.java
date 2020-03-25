@@ -7,18 +7,22 @@ import com.umssonline.auth.repository.domain.User;
 import com.umssonline.auth.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     //region Properties
     private final UserRepository userRepository;
@@ -145,5 +149,23 @@ public class UserService {
 
         target.getUserRoles().forEach(role -> role.setIsDeleted(false));
 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User foundUser = userRepository.findByAccount(username);
+        if (null == foundUser) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        return new org.springframework.security.core.userdetails.User(
+            foundUser.getAccount(),
+                foundUser.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                new ArrayList<>()
+        );
     }
 }
