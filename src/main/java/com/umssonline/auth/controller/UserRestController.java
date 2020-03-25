@@ -1,10 +1,10 @@
-package com.umssonline.auth.controllers;
+package com.umssonline.auth.controller;
 
-import com.umssonline.auth.models.dto.CredentialsDto;
-import com.umssonline.auth.models.dto.RegisterUserDto;
-import com.umssonline.auth.models.dto.UpdateUserDto;
-import com.umssonline.auth.models.entity.User;
-import com.umssonline.auth.services.UserService;
+import com.umssonline.auth.controller.dto.CredentialsDto;
+import com.umssonline.auth.controller.dto.RegisterUserDto;
+import com.umssonline.auth.controller.dto.UpdateUserDto;
+import com.umssonline.auth.repository.domain.User;
+import com.umssonline.auth.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

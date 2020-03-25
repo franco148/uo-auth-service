@@ -1,6 +1,7 @@
-package com.umssonline.auth.models.dto;
+package com.umssonline.auth.controller.dto;
 
-import com.umssonline.auth.models.entity.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.umssonline.auth.repository.domain.RoleEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -11,16 +12,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "Role Model")
 @Getter
 @Setter
-public class UpdateRoleDto {
-
-    @ApiModelProperty
-    (
-        notes = "Id field can not be null or empty.",
-        required = true,
-        dataType = "Integer"
-    )
-    @NotNull
-    private Long id;
+public class RegisterRoleDto {
 
     @ApiModelProperty
     (
@@ -30,4 +22,7 @@ public class UpdateRoleDto {
     )
     @NotNull
     private RoleEnum authority;
+
+    @JsonIgnore
+    private Boolean isDeleted = false;
 }

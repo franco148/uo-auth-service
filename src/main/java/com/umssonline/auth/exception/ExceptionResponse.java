@@ -1,4 +1,4 @@
-package com.umssonline.auth.exceptions;
+package com.umssonline.auth.exception;
 
 import lombok.Data;
 

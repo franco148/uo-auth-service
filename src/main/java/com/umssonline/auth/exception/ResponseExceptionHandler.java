@@ -1,4 +1,4 @@
-package com.umssonline.auth.exceptions;
+package com.umssonline.auth.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

@@ -1,7 +1,7 @@
-package com.umssonline.auth.services;
+package com.umssonline.auth.service;
 
-import com.umssonline.auth.models.entity.User;
-import com.umssonline.auth.repositories.UserRepository;
+import com.umssonline.auth.repository.domain.User;
+import com.umssonline.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
