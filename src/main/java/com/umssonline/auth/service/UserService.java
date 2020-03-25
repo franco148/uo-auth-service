@@ -140,15 +140,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(confirmedUser);
     }
 
+    @Transactional(readOnly = true)
+    public UserResponseDto getUserDetailsByAccount(String account) {
 
-    private void copyUserEntity(User target, User source) {
-        target.setIsEnabled(source.getIsEnabled());
-        target.setIsDeleted(source.getIsDeleted());
-        target.setIsLogged(source.getIsLogged());
-        target.setCreatedAt(source.getCreatedAt());
+        User userFromDb = userRepository.findByAccount(account);
+        if (null == userFromDb) {
+            String errorMessage = "User with account=%s does not exist.";
+            log.error(errorMessage, account);
+            throw new EntityNotFoundException(String.format(errorMessage, account));
+        }
 
-        target.getUserRoles().forEach(role -> role.setIsDeleted(false));
-
+        UserResponseDto userResponse = modelMapper.map(userFromDb, UserResponseDto.class);
+        return userResponse;
     }
 
     @Override
@@ -168,4 +171,16 @@ public class UserService implements UserDetailsService {
                 new ArrayList<>()
         );
     }
+
+    //region Utilities
+    private void copyUserEntity(User target, User source) {
+        target.setIsEnabled(source.getIsEnabled());
+        target.setIsDeleted(source.getIsDeleted());
+        target.setIsLogged(source.getIsLogged());
+        target.setCreatedAt(source.getCreatedAt());
+
+        target.getUserRoles().forEach(role -> role.setIsDeleted(false));
+
+    }
+    //endregion
 }
