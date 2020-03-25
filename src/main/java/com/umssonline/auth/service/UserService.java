@@ -7,6 +7,7 @@ import com.umssonline.auth.repository.domain.User;
 import com.umssonline.auth.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +21,16 @@ import java.util.stream.Collectors;
 public class UserService {
 
     //region Properties
-    private UserRepository userRepository;
-    private ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
     //endregion
 
     //region Constructors
-    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
     //endregion
 
@@ -92,6 +95,8 @@ public class UserService {
     @Transactional
     public UserResponseDto register(RegisterUserDto userDto) {
         User userToSave = modelMapper.map(userDto, User.class);
+        userToSave.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         User savedUser = userRepository.saveAndFlush(userToSave);
         UserResponseDto userResponse = modelMapper.map(savedUser, UserResponseDto.class);
         return userResponse;
