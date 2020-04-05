@@ -1,7 +1,7 @@
-package com.umssonline.auth.models.dto;
+package com.umssonline.auth.controller.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.umssonline.auth.models.entity.RoleEnum;
+import com.umssonline.auth.repository.domain.RoleEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

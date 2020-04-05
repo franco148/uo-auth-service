@@ -3,9 +3,11 @@ package com.umssonline.auth.config;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class UtilsBeanConfig {
+public class BeanUtilsConfig {
 
     @Bean
     public ModelMapper modelMapper() {
@@ -13,5 +15,10 @@ public class UtilsBeanConfig {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
 
         return modelMapper;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

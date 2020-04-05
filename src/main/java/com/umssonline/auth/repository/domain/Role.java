@@ -1,4 +1,4 @@
-package com.umssonline.auth.models.entity;
+package com.umssonline.auth.repository.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;

@@ -1,18 +1,15 @@
-package com.umssonline.auth.controllers;
+package com.umssonline.auth.controller;
 
-import com.umssonline.auth.models.dto.CredentialsDto;
-import com.umssonline.auth.models.dto.RegisterUserDto;
-import com.umssonline.auth.models.dto.UpdateUserDto;
-import com.umssonline.auth.models.entity.User;
-import com.umssonline.auth.services.UserService;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.umssonline.auth.controller.dto.request.CredentialsDto;
+import com.umssonline.auth.controller.dto.request.RegisterUserDto;
+import com.umssonline.auth.controller.dto.request.UpdateUserDto;
+import com.umssonline.auth.controller.dto.response.UserResponseDto;
+import com.umssonline.auth.service.UserService;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,16 +20,19 @@ import java.util.Collections;
 @RestController
 public class UserRestController {
 
-    @Autowired
+    //region Properties
     private UserService userService;
+    //endregion
 
-    @Autowired
-    private ModelMapper modelMapper;
-
+    //region Constructors
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
+    //endregion
 
     @GetMapping
-    public ResponseEntity<Collection<User>> getAll() {
-        Collection<User> userCollection = userService.loadAll();
+    public ResponseEntity<Collection<UserResponseDto>> getAll() {
+        Collection<UserResponseDto> userCollection = userService.loadAll();
 
         if (userCollection.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
@@ -42,25 +42,22 @@ public class UserRestController {
     }
 
     @GetMapping("/{user_id}")
-    public ResponseEntity<User> getById(@PathVariable("user_id") final Long id) {
-        User user = userService.detail(id);
+    public ResponseEntity<UserResponseDto> getById(@PathVariable("user_id") final Long id) {
+        UserResponseDto user = userService.detail(id);
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@Valid @RequestBody final RegisterUserDto user) {
-        User converted = modelMapper.map(user, User.class);
+    public ResponseEntity<UserResponseDto> save(@Valid @RequestBody final RegisterUserDto userDto) {
 
-        User persistedUser = userService.register(converted);
+        UserResponseDto persistedUser = userService.register(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(persistedUser);
     }
 
     @PatchMapping("/{user_id}")
-    public ResponseEntity<User> edit(@PathVariable("user_id") final Long id, @Valid @RequestBody final UpdateUserDto user) throws EntityNotFoundException {
-        User converted = modelMapper.map(user, User.class);
-        converted.setId(id);
+    public ResponseEntity<UserResponseDto> edit(@PathVariable("user_id") final Long id, @Valid @RequestBody final UpdateUserDto userDto) {
 
-        User editedUser = userService.edit(converted);
+        UserResponseDto editedUser = userService.edit(id, userDto);
         return ResponseEntity.ok(editedUser);
     }
 
@@ -71,8 +68,8 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> logIn(@Valid @RequestBody final CredentialsDto credentialsDto) {
-        User loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
+    public ResponseEntity<UserResponseDto> logIn(@Valid @RequestBody final CredentialsDto credentialsDto) {
+        UserResponseDto loggedUser = userService.login(credentialsDto.getAccount(), credentialsDto.getPassword());
 
         return ResponseEntity.ok(loggedUser);
     }
